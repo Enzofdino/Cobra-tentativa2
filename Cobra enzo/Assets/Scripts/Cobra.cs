@@ -6,7 +6,11 @@ using UnityEngine;
 public class Cobra : MonoBehaviour
 {
     #region singleton
+<<<<<<< HEAD
+    public static Cobra cobra;
+=======
     public Cobra cobra;
+>>>>>>> 76d0feb368aff55e530ffb4a9da007192eae708b
     public GameManager gameManager;
     private void Awake()
     {
@@ -148,7 +152,7 @@ public class Cobra : MonoBehaviour
         return comprimentoparede;
     }
 
-    public void SetSpeed(float newvelocidade)
+    public void Colocarvelocidade(float newvelocidade)
     {
         velocidade = newvelocidade;
     }
