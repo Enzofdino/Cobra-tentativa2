@@ -6,12 +6,15 @@ using UnityEngine;
 public class Cobra : MonoBehaviour
 {
     public Transform corpoPrefab;
+    public Transform paredePrefab;
     public List<Transform> body = new List<Transform>();
     private Vector2 direção;
     public float velocidade = 10.0f;
     public float tamanhocélula = 0.3f;
     public Vector2 indexcélula = Vector2.zero;
     private float tempocélula = 0;
+    private float alturaparede;
+    private float comprimentoparede;
     void Start()
     {
         direção = Vector2.up;
@@ -52,6 +55,7 @@ public class Cobra : MonoBehaviour
 
             tempocélula = Time.time + 1 / velocidade;
             indexcélula = transform.position / tamanhocélula;
+            
         }
 
     }
@@ -74,9 +78,64 @@ public class Cobra : MonoBehaviour
             Vector2 index = body[i].position / tamanhocélula;
             if (Mathf.Abs(index.x - indexcélula.x) < 0.00001f && Mathf.Abs(index.y - indexcélula.y) < 0.00001f)
             {
-               
+
                 break;
             }
         }
     }
+    void criarparedes(float width, float height)
+    {
+        // Armazenar largura e altura da área de jogo
+        tamanhocélula = width;
+        comprimentoparede = height;
+
+        // Calcular os limites da área de jogo
+        int cellX = Mathf.FloorToInt(width / tamanhocélula / 2);
+        int cellY = Mathf.FloorToInt(height / tamanhocélula / 2);
+
+        // Limpar paredes existentes
+        foreach (GameObject wall in GameObject.FindGameObjectsWithTag("Wall"))
+        {
+            Destroy(wall);
+        }
+
+        // Criar paredes superior e inferior
+        for (int i = -cellX; i <= cellX; i++)
+        {
+            Vector2 top = new Vector2(i * tamanhocélula, cellY * tamanhocélula);
+            Vector2 bottom = new Vector2(i * tamanhocélula, -cellY * tamanhocélula);
+            Instantiate(paredePrefab, top, Quaternion.identity).tag = "Wall";
+            Instantiate(paredePrefab, bottom, Quaternion.identity).tag = "Wall";
+        }
+
+        // Criar paredes esquerda e direita
+        for (int i = -cellY; i <= cellY; i++)
+        {
+            Vector2 left = new Vector2(-cellX * tamanhocélula, i * tamanhocélula);
+            Vector2 right = new Vector2(cellX * tamanhocélula, i * tamanhocélula);
+            Instantiate(paredePrefab, left, Quaternion.identity).tag = "Wall";
+            Instantiate(paredePrefab, right, Quaternion.identity).tag = "Wall";
+        }
+    }
+    public void colocartamanhodaarea(float width, float height)
+    {
+        
+        criarparedes(width, height);
+    }
+
+    public float pegartamanho()
+    {
+        return alturaparede;
+    }
+
+    public float pegarcomprimento()
+    {
+        return comprimentoparede;
+    }
+
+    public void SetSpeed(float newvelocidade)
+    {
+        velocidade = newvelocidade;
+    }
 }
+
