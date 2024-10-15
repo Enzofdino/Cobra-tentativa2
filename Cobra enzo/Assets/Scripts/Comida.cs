@@ -7,7 +7,7 @@ public class Comida : MonoBehaviour
     public Transform comidaprefab; // Prefab da comida
     public Cobra cobra; // Referência à cobra
 
-    public Transform currentFood; // Comida atual
+    private Transform currentFood; // Comida atual
 
     void Start()
     {

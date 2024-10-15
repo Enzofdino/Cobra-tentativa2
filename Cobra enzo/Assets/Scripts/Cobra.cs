@@ -8,7 +8,7 @@ public class Cobra : MonoBehaviour
     #region singleton
 
     public GameManager GameManager;
-    public Cobra cobra;
+    
    
 
    
@@ -109,7 +109,7 @@ public class Cobra : MonoBehaviour
         int cellY = Mathf.FloorToInt(height / tamanhocélula / 2);
 
         // Limpar paredes existentes
-        foreach (GameObject wall in GameObject.FindGameObjectsWithTag("Wall"))
+        foreach (GameObject wall in GameObject.FindGameObjectsWithTag("Parede"))
         {
             Destroy(wall);
         }
@@ -119,8 +119,8 @@ public class Cobra : MonoBehaviour
         {
             Vector2 top = new Vector2(i * tamanhocélula, cellY * tamanhocélula);
             Vector2 bottom = new Vector2(i * tamanhocélula, -cellY * tamanhocélula);
-            Instantiate(paredePrefab, top, Quaternion.identity).tag = "Wall";
-            Instantiate(paredePrefab, bottom, Quaternion.identity).tag = "Wall";
+            Instantiate(paredePrefab, top, Quaternion.identity).tag = "Parede";
+            Instantiate(paredePrefab, bottom, Quaternion.identity).tag = "Parede";
         }
 
         // Criar paredes esquerda e direita
@@ -128,8 +128,8 @@ public class Cobra : MonoBehaviour
         {
             Vector2 left = new Vector2(-cellX * tamanhocélula, i * tamanhocélula);
             Vector2 right = new Vector2(cellX * tamanhocélula, i * tamanhocélula);
-            Instantiate(paredePrefab, left, Quaternion.identity).tag = "Wall";
-            Instantiate(paredePrefab, right, Quaternion.identity).tag = "Wall";
+            Instantiate(paredePrefab, left, Quaternion.identity).tag = "Parede";
+            Instantiate(paredePrefab, right, Quaternion.identity).tag = "Parede";
         }
     }
     public void colocartamanhodaarea(float width, float height)
