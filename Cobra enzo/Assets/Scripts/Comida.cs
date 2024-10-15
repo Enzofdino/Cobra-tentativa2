@@ -60,5 +60,15 @@ public class Comida : MonoBehaviour
         }
         return false;
     }
-
+    void Update()
+    {
+        
+        Vector2 index = currentFood.position / Cobra.cobra.tamanhocélula;
+        if (Mathf.Abs(index.x - Cobra.cobra.indexcélula.x) < 0.5f && Mathf.Abs(index.y - Cobra.cobra.indexcélula.y) < 0.5f)
+        {
+            
+            SpawnFood();
+            Cobra.cobra.aumentartamanho(); 
+        }
+    }
 }

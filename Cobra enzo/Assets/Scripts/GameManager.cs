@@ -73,7 +73,7 @@ public class GameManager : MonoBehaviour
     {
         score = 0;
         UpdateScore(0);
-        Cobra.Restart();
+        Cobra.cobra.Restart();
         gameOverTexto.gameObject.SetActive(false);
     }
 
