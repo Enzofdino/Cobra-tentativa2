@@ -132,7 +132,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 13453768}
-  - component: {fileID: 13453767}
+  - component: {fileID: 13453769}
   m_Layer: 0
   m_Name: SpawnManager
   m_TagString: Untagged
@@ -140,20 +140,6 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!114 &13453767
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 13453766}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 34a6a19b0fdb81e4b9fee3fb4dc1bc61, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  comidaprefab: {fileID: 3946742924469876522, guid: 37d2c218468388b4ba9b597a26a9ec74, type: 3}
-  cobra: {fileID: 0}
 --- !u!4 &13453768
 Transform:
   m_ObjectHideFlags: 0
@@ -169,6 +155,20 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &13453769
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 13453766}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 34a6a19b0fdb81e4b9fee3fb4dc1bc61, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  comidaPrefab: {fileID: 3946742924469876522, guid: 37d2c218468388b4ba9b597a26a9ec74, type: 3}
+  cobra: {fileID: 1342410493}
 --- !u!1 &55104911
 GameObject:
   m_ObjectHideFlags: 0
@@ -828,7 +828,7 @@ Camera:
   far clip plane: 1000
   field of view: 60
   orthographic: 1
-  orthographic size: 5
+  orthographic size: 13.794096
   m_Depth: -1
   m_CullingMask:
     serializedVersion: 2
@@ -888,18 +888,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 23112eef07f596d4ab8f5c219e82f752, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  cobra: {fileID: 0}
+  cobra: {fileID: 1342410493}
+  ScoreText: {fileID: 847450657}
+  HighScoreText: {fileID: 966051198}
+  gameOverText: {fileID: 55104913}
   widthInput: {fileID: 489627447}
   heightInput: {fileID: 1110947800}
   speedInput: {fileID: 1069739381}
   startButton: {fileID: 1394645978}
   panel: {fileID: 2109362292}
-  recordetexto: {fileID: 847450657}
-  melhorrecordetexto: {fileID: 966051198}
-  gameOverTexto: {fileID: 55104913}
-  ScoreText: {fileID: 847450657}
-  HighScoreText: {fileID: 966051198}
-  gameOverText: {fileID: 55104913}
 --- !u!4 &575507591
 Transform:
   m_ObjectHideFlags: 0
@@ -2014,13 +2011,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a97664def47f4404682f86c7da9f4bd0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  GameManager: {fileID: 0}
-  corpoPrefab: {fileID: 0}
-  paredePrefab: {fileID: 0}
+  corpoprefab: {fileID: 3933744960110982694, guid: 9c2d74c81b9274840afa7eb9151d26dd, type: 3}
+  paredePrefab: {fileID: 830457234874261083, guid: 9072956e6ad811a4ca8cf0937db6cbe4, type: 3}
+  gameManager: {fileID: 575507590}
   body: []
   velocidade: 10
   "tamanhoc\xE9lula": 0.3
-  "indexc\xE9lula": {x: 0, y: 0}
+  celulaindex: {x: 0, y: 0}
 --- !u!4 &1342410494
 Transform:
   m_ObjectHideFlags: 0

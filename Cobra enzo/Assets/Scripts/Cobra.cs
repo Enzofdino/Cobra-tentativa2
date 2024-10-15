@@ -3,50 +3,44 @@ using System.Collections.Generic;
 using System.Runtime.CompilerServices;
 using UnityEngine;
 
-public class Cobra : MonoBehaviour
+public class Cobra : MonoBehaviour // Classe responsavel por controlar o comportamento da cobra no jogo.
 {
-    #region singleton
-
-    public GameManager GameManager;
-    
-   
-
-   
-    #endregion   
-    public Transform corpoPrefab;
+    public Transform corpoprefab;
     public Transform paredePrefab;
-    public List<Transform> body = new List<Transform>();
+    public GameManager gameManager;
     private Vector2 direção;
+    private float tempocélula = 0;
+    public List<Transform> body = new List<Transform>();
     public float velocidade = 10.0f;
     public float tamanhocélula = 0.3f;
-    public Vector2 indexcélula = Vector2.zero;
-    private float tempocélula = 0;
-    private float alturaparede;
-    private float comprimentoparede;
+    public Vector2 celulaindex = Vector2.zero;
+    private float comprimento;
+    private float tamanho;
     private bool gameOver = false;
 
-    void Start()
+    void Start() // Metodo chamado no inicio do jogo.
     {
         direção = Vector2.up;
     }
 
-
+    // Update is called once per frame
     void Update()
     {
         if (gameOver)
         {
-            if (Input.GetKeyDown(KeyCode.R)) GameManager.Restart();
+            if (Input.GetKeyDown(KeyCode.R)) gameManager.Restart(); // Reinicia o jogo se apertar a tecla R apos o game over.
             return;
         }
-        escolhadireção();
-        Movimentação();
-        checarcolisãodecorpo();
+
+        escolherdirecao();
+        Movimentar();
+        checarcolisaocorpo();
     }
-    void escolhadireção()
+    void escolherdirecao() // Metodo para alterar a direcao da cobra com base na entrada do jogador.
     {
         Vector2 newdirection = Vector2.zero;
         Vector2 input = new Vector2(Input.GetAxisRaw("Horizontal"), Input.GetAxisRaw("Vertical"));
-
+        // Altera a direcao conforme a tecla pressionada.
         if (input.y == -1) newdirection = Vector2.down;
         else if (input.y == 1) newdirection = Vector2.up;
         else if (input.x == -1) newdirection = Vector2.left;
@@ -56,7 +50,7 @@ public class Cobra : MonoBehaviour
             direção = newdirection;
         }
     }
-    void Movimentação()
+    void Movimentar() // Metodo que move a cobra na direcao definida.
     {
         if (Time.time > tempocélula)
         {
@@ -69,47 +63,94 @@ public class Cobra : MonoBehaviour
             transform.position += (Vector3)direção * tamanhocélula;
 
             tempocélula = Time.time + 1 / velocidade;
-            indexcélula = transform.position / tamanhocélula;
-            
-        }
+            celulaindex = transform.position / tamanhocélula;
 
+            CheckWallWrapAround();
+        }
     }
-    public void aumentartamanho()
+    void CheckWallWrapAround() // Metodo que verifica se a cobra atravessou a parede e ajusta a posicao.
+    {
+        if (transform.position.x > comprimento / 2)
+            transform.position = new Vector3(-comprimento / 2 + 0.01f, transform.position.y, transform.position.z);
+        else if (transform.position.x < -comprimento / 2)
+            transform.position = new Vector3(comprimento / 2 - 0.01f, transform.position.y, transform.position.z);
+
+        if (transform.position.y > tamanho / 2)
+            transform.position = new Vector3(transform.position.x, -tamanho / 2 + 0.01f, transform.position.z);
+        else if (transform.position.y < -tamanho / 2)
+            transform.position = new Vector3(transform.position.x, tamanho / 2 - 0.01f, transform.position.z);
+    }
+    public void aumentartamanho()  // Metodo responsavel por aumentar o corpo da cobra ao comer alimento.
     {
         Vector2 position = transform.position;
         if (body.Count != 0)
             position = body[body.Count - 1].position;
 
-        body.Add(Instantiate(corpoPrefab, position, Quaternion.identity).transform);
-       
+        body.Add(Instantiate(corpoprefab, position, Quaternion.identity).transform);
+        gameManager.UpdateScore(1);
     }
-
-    void checarcolisãodecorpo()
+    void checarcolisaocorpo() // Metodo que verifica se a cobra colidiu com o proprio corpo.
     {
-        if (body.Count < 2) return;
-
-        for (int i = 0; i < body.Count; ++i)
+        if (body.Count < 3) return;
+        for (int i = 0; i < body.Count; i++)
         {
             Vector2 index = body[i].position / tamanhocélula;
-            if (Mathf.Abs(index.x - indexcélula.x) < 0.00001f && Mathf.Abs(index.y - indexcélula.y) < 0.00001f)
+            if (Mathf.Abs(index.x - celulaindex.x) < 0.00001f && Mathf.Abs(index.y - celulaindex.y) < 0.00001f)
             {
                 GameOver();
                 break;
             }
         }
     }
-    void criarparedes(float width, float height)
+    void GameOver() // Metodo que termina o jogo ao ocorrer uma colisao.
+    {
+        gameOver = true;
+        gameManager.GameOver();
+
+    }
+    public void reiniciar() // Metodo responsavel por reiniciar o jogo e resetar o estado da cobra.
+    {
+        gameOver = false;
+
+        // Limpar corpo da cobra
+        for (int i = 0; i < body.Count; ++i)
+        {
+            Destroy(body[i].gameObject);
+        }
+        body.Clear();
+
+        // Resetar posicao da cobra
+        transform.position = Vector3.zero;
+    }
+    public float pegarcomprimento() // Metodo que retorna a largura da area de jogo.
+    {
+        return comprimento;
+    }
+    public float pegartamanho()  // Metodo que retorna a altura da area de jogo.
+    {
+        return tamanho;
+    }
+    public void colocarvelocidade(float newSpeed) // Metodo para ajustar a velocidade da cobra.
+    {
+        velocidade = newSpeed;
+    }
+    public void SetGameArea(float width, float height) // Metodo para ajustar a area de jogo.
+    {
+        // Ajuste a lógica para criar paredes com base nos novos valores
+        criarparedes(width, height);
+    }
+    void criarparedes(float width, float height)  // Metodo que cria as paredes da area de jogo.
     {
         // Armazenar largura e altura da área de jogo
-        tamanhocélula = width;
-        comprimentoparede = height;
+        tamanho = width;
+        comprimento = height;
 
         // Calcular os limites da área de jogo
         int cellX = Mathf.FloorToInt(width / tamanhocélula / 2);
         int cellY = Mathf.FloorToInt(height / tamanhocélula / 2);
 
         // Limpar paredes existentes
-        foreach (GameObject wall in GameObject.FindGameObjectsWithTag("Parede"))
+        foreach (GameObject wall in GameObject.FindGameObjectsWithTag("Wall"))
         {
             Destroy(wall);
         }
@@ -132,45 +173,4 @@ public class Cobra : MonoBehaviour
             Instantiate(paredePrefab, right, Quaternion.identity).tag = "Parede";
         }
     }
-    public void colocartamanhodaarea(float width, float height)
-    {
-        
-        criarparedes(width, height);
-    }
-
-    public float pegartamanho()
-    {
-        return alturaparede;
-    }
-
-    public float pegarcomprimento()
-    {
-        return comprimentoparede;
-    }
-
-    public void Colocarvelocidade(float newvelocidade)
-    {
-        velocidade = newvelocidade;
-    }
-   public void GameOver()
-    {
-        gameOver = true;
-       
-    }
-
-    public  void Restart()
-    {
-        gameOver = false;
-
-        // Limpar corpo da cobra
-        for (int i = 0; i < body.Count; ++i)
-        {
-            Destroy(body[i].gameObject);
-        }
-        body.Clear();
-
-        // Resetar posição da cobra
-        transform.position = Vector3.zero;
-    }
 }
-
