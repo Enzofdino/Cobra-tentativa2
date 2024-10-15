@@ -22,6 +22,7 @@ public class Cobra : MonoBehaviour
     {
         escolhadireção();
         Movimentação();
+        checarcolisãodecorpo();
     }
     void escolhadireção()
     {
@@ -53,5 +54,29 @@ public class Cobra : MonoBehaviour
             indexcélula = transform.position / tamanhocélula;
         }
 
+    }
+    public void aumentartamanho()
+    {
+        Vector2 position = transform.position;
+        if (body.Count != 0)
+            position = body[body.Count - 1].position;
+
+        body.Add(Instantiate(corpoPrefab, position, Quaternion.identity).transform);
+       
+    }
+
+    void checarcolisãodecorpo()
+    {
+        if (body.Count < 2) return;
+
+        for (int i = 0; i < body.Count; ++i)
+        {
+            Vector2 index = body[i].position / tamanhocélula;
+            if (Mathf.Abs(index.x - indexcélula.x) < 0.00001f && Mathf.Abs(index.y - indexcélula.y) < 0.00001f)
+            {
+               
+                break;
+            }
+        }
     }
 }
