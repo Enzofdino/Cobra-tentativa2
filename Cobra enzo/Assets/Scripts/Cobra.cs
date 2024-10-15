@@ -5,6 +5,14 @@ using UnityEngine;
 
 public class Cobra : MonoBehaviour
 {
+    #region singleton
+    public Cobra cobra;
+    public GameManager gameManager;
+    private void Awake()
+    {
+        cobra = this;
+    }
+    #endregion   
     public Transform corpoPrefab;
     public Transform paredePrefab;
     public List<Transform> body = new List<Transform>();
@@ -15,6 +23,8 @@ public class Cobra : MonoBehaviour
     private float tempocélula = 0;
     private float alturaparede;
     private float comprimentoparede;
+    private bool gameOver = false;
+
     void Start()
     {
         direção = Vector2.up;
@@ -23,6 +33,11 @@ public class Cobra : MonoBehaviour
 
     void Update()
     {
+        if (gameOver)
+        {
+            if (Input.GetKeyDown(KeyCode.R)) gameManager.Restart();
+            return;
+        }
         escolhadireção();
         Movimentação();
         checarcolisãodecorpo();
@@ -78,7 +93,7 @@ public class Cobra : MonoBehaviour
             Vector2 index = body[i].position / tamanhocélula;
             if (Mathf.Abs(index.x - indexcélula.x) < 0.00001f && Mathf.Abs(index.y - indexcélula.y) < 0.00001f)
             {
-
+                GameOver();
                 break;
             }
         }
@@ -136,6 +151,26 @@ public class Cobra : MonoBehaviour
     public void SetSpeed(float newvelocidade)
     {
         velocidade = newvelocidade;
+    }
+   public void GameOver()
+    {
+        gameOver = true;
+       
+    }
+
+    public  void Restart()
+    {
+        gameOver = false;
+
+        // Limpar corpo da cobra
+        for (int i = 0; i < body.Count; ++i)
+        {
+            Destroy(body[i].gameObject);
+        }
+        body.Clear();
+
+        // Resetar posição da cobra
+        transform.position = Vector3.zero;
     }
 }
 
