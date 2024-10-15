@@ -6,16 +6,12 @@ using UnityEngine;
 public class Cobra : MonoBehaviour
 {
     #region singleton
-<<<<<<< HEAD
-    public static Cobra cobra;
-=======
+
+    public GameManager GameManager;
     public Cobra cobra;
->>>>>>> 76d0feb368aff55e530ffb4a9da007192eae708b
-    public GameManager gameManager;
-    private void Awake()
-    {
-        cobra = this;
-    }
+   
+
+   
     #endregion   
     public Transform corpoPrefab;
     public Transform paredePrefab;
@@ -39,7 +35,7 @@ public class Cobra : MonoBehaviour
     {
         if (gameOver)
         {
-            if (Input.GetKeyDown(KeyCode.R)) gameManager.Restart();
+            if (Input.GetKeyDown(KeyCode.R)) GameManager.Restart();
             return;
         }
         escolhadireção();

@@ -6,9 +6,9 @@ using UnityEngine;
 public class GameManager : MonoBehaviour
 {
 
-    #region singleton
-    public static Cobra cobra;
-    public GameManager instance;
+    #region Singleton
+    public static GameManager instance; // Deve ser estático para o padrão Singleton
+    public Cobra cobra; // Referência à cobra
     public TMP_InputField widthInput;
     public TMP_InputField heightInput;
     public TMP_InputField speedInput;
@@ -17,32 +17,37 @@ public class GameManager : MonoBehaviour
 
     private void Awake()
     {
-       instance = this;
+        // Garante que apenas uma instância do GameManager exista
+        if (instance == null)
+        {
+            instance = this;
+        }
+        else
+        {
+            Destroy(gameObject); // Destrói o objeto se já houver uma instância
+        }
     }
     #endregion
+
     public TextMeshProUGUI recordetexto;
     public TextMeshProUGUI melhorrecordetexto;
     public TextMeshProUGUI gameOverTexto;
-
-   
     public TextMeshProUGUI ScoreText;
     public TextMeshProUGUI HighScoreText;
     public TextMeshProUGUI gameOverText;
-
 
     private int score = 0;
     private int highScore = 0;
 
     void Start()
     {
-
         gameOverTexto.gameObject.SetActive(false);
-        recordetexto.gameObject.SetActive(true); 
-        melhorrecordetexto.gameObject.SetActive(true); 
+        recordetexto.gameObject.SetActive(true);
+        melhorrecordetexto.gameObject.SetActive(true);
 
         gameOverText.gameObject.SetActive(false);
-        ScoreText.gameObject.SetActive(true); 
-        HighScoreText.gameObject.SetActive(true); 
+        ScoreText.gameObject.SetActive(true);
+        HighScoreText.gameObject.SetActive(true);
 
         UpdateScore(0);
     }
@@ -50,16 +55,12 @@ public class GameManager : MonoBehaviour
     public void UpdateScore(int points)
     {
         score += points;
-
         recordetexto.text = "SCORE: " + score.ToString();
-
         ScoreText.text = "SCORE: " + score.ToString();
-
 
         if (score > highScore)
         {
             highScore = score;
-
             melhorrecordetexto.text = "HIGH SCORE: " + highScore.ToString();
         }
     }
@@ -73,7 +74,7 @@ public class GameManager : MonoBehaviour
     {
         score = 0;
         UpdateScore(0);
-        Cobra.cobra.Restart();
+        cobra.Restart(); // Certifique-se de que este método existe na classe Cobra
         gameOverTexto.gameObject.SetActive(false);
     }
 
@@ -83,11 +84,9 @@ public class GameManager : MonoBehaviour
 
         if (TryGetInputValues(out width, out height, out speed))
         {
-            
-            Cobra.cobra.colocartamanhodaarea(width, height);
-            Cobra.cobra.Colocarvelocidade(speed);
+            cobra.colocartamanhodaarea(width, height); // Certifique-se de que este método existe na classe Cobra
+            cobra.Colocarvelocidade(speed); // Certifique-se de que este método existe na classe Cobra
 
-           
             panel.SetActive(false);
             widthInput.gameObject.SetActive(false);
             heightInput.gameObject.SetActive(false);
@@ -104,7 +103,6 @@ public class GameManager : MonoBehaviour
     {
         width = height = speed = 0;
 
-    
         string[] inputs = { widthInput.text, heightInput.text, speedInput.text };
         float[] values = { width, height, speed };
 
@@ -116,18 +114,13 @@ public class GameManager : MonoBehaviour
             }
         }
 
-       
         width = values[0];
         height = values[1];
         speed = values[2];
 
-        return true; 
-           
-        }
+        return true;
+    }
 
-    
-
-   
 
 }
   
